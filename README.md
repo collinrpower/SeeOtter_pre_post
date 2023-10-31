@@ -1,87 +1,169 @@
-This README provides detailed instructions for the process of backing up camera files, organizing and processing them, and generating results. These steps are intended to be followed in sequence.
+# SeeOtter
+Sea otter detection application for use in aerial photography surveys.
 
-## 1. Backup Camera Files to Hard Drive
+# Requirements
 
-### a. Run Backup_Images.py to Automate This Process
+ - Windows
+ - Conda
+ - Python 3.9
+ - PyTorch
+   - https://pytorch.org/get-started/locally/
+   - CUDA 11.3 Version Recommended if your computer has a supported Nvidia GPU
+     - https://developer.nvidia.com/cuda-11.3.0-download-archive?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exe_local
+ - Kivy
+   - https://kivy.org/doc/stable/gettingstarted/installation.html
+   - https://anaconda.org/conda-forge/kivy
 
-1. Select the number of backups you are going to make.
-2. Select the drive and folder where you want the backups placed.
-3. Run the script.
+---
 
-### b. Alternatively, You Can Manually Copy and Paste the Camera Files
+# Getting Started
 
-### c. Backups Should Be Made on at Least 3 Separate Physical Drives
+Survey acts as the main project file that contains the images and data related to a survey.
 
-#### i. 2 (or More) of These Drives Will Serve as Archives and Will Not Be Processed
+## Create
 
-##### 1. Large External Hard Drives (HHD) Work Well for This Purpose
+```python
+# Create survey with default images dir
+survey = Survey.new("SurveyName")
+```
+```python
+# Create survey with existing images dir
+survey = Survey.new("SurveyName", images_dir="C:/Path/to/images")
+```
+```python
+# Create survey in different directory
+survey = Survey.new("SurveyName", survey_path="C:/Path/to/survey")
+```
+```python
+# Overwrite existing survey
+survey = Survey.new("SurveyName", images_dir="C:/Path/to/images", overwrite=True)
+```
 
-- Make sure not to move HHDs when reading or writing data.
+Creating a new survey will make a survey folder located at:
+ 
+>./Surveys/{SurveyName}
 
-#### ii. 1 of These Drives Will Serve as the Working Drive Where the Data Will Be Processed
+If images_dir is not supplied, an images folder will be created at:
 
-##### 1. A 1-2 TB External Solid State Drive (SSD) Is Best for the Working Drive
+>./Surveys/{SurveyName}/Images
 
-- HHDs will also work but you will see a decrease in performance.
+## Load
 
-## 2. Move Image Files into ‘0’ and ‘1’ Camera Folders Based on Which Camera the Image Was Taken From
+```python
+survey.load("SurveyName")
+```
 
-### a. You Should Create a Folder Structure That Looks Like This and Place the Images Inside Here:
+```python
+# Reloads images from disk and overwrites all associated data
+survey.load("SurveyName", reload_images=True)
+```
+Load from different directory
 
-`*Location*/*Camera*/*YYYY*/*MM_DD*/Images`
+```python
+survey.load(survey_path="C:/Path/to/survey")
+```
 
-- Example: `G:\GBLAtest\Waldo\2022\08_03\Images`
+## Save
 
-### b. For Non-Waldo Cameras
+```python
+survey.save()
+```
 
-#### i. Create an "Images" Folder in Your "MM_DD" Folder
+---
 
-#### ii. Create Two New Folders in This Images Folder Named '0' and '1'
+# Processing
 
-#### iii. Copy All the Images from the Specific Cameras into Their Respective Folders
+The easiest way to process a survey is to set the current survey in "select_survey.py" and run "main.py"
 
-### c. For Waldo Cameras
+Add your survey name and image directory to the dict in "select_survey.py"
 
-#### i. Run Move_Waldo_Images_Into_1_0_folders.py
+```python
+## select_survey.py
+surveys = [
+    ("MySurvey1", None),
+    ("MySurvey2", "C:/Path/to/images")
+]
+```
 
-1. Select your MM_DD folder.
-2. This will automatically move the images into the proper folders.
+Select the survey you wish to use
 
-## 3. Extract Image Metadata and Verify Data Quality
+```python
+## select_survey.py
+selected_survey_info = surveys[1]
+```
 
-### a. Run 'Image_GPS_extract.py'
+Then run "main.py" to start processing of images.
 
-1. For 'Select Input Folder,' choose the "Images folder you created in step two.
-   - Folder structure: `X:\*Location*\*Camera*\*YYYY*\*MM_DD*\Images`
-   - Example: `G:\GBLAtest\Waldo\2022\08_03\Images`
-2. Enter a name for your CSV and select the folder you would like it to be saved.
+---
 
-### b. Open the CSV You Just Created to View Image Filepaths, Timestamps, Latitudes, Longitudes, and Altitudes in a Mapping Software (ArcMap, QGIS, Google Earth, etc.)
+# Waldo Survey
 
-- Verify that there are no large gaps with missing data and images appear to be where they are supposed to be.
+## File Structure
 
-### c. Upload a KML or SHP of the Proposed Transects to Be Used as a Reference
+For a Waldo Survey to be imported, it must be stored with the correct naming conventions and folder organization as such:
 
-## 4. Assign Images to Transects
+> DriveLetter:/Location/CameraSystem/YYYY/MM_DD/Waldo Data
 
-### a. Use the tx_assignment_template.csv or Create a CSV with 5 Columns:
+Example:
 
-- 'start_img', 'end_img', 'transect_id', 'start_time', 'end_time'
+> D:\Cook_Inlet\Waldo\2022\04_11
 
-### b. Fill 'transect_id' with the Names of Your Proposed Transects
+## Importing/Converting Waldo Survey
 
-### c. For Each Transect, Set Your Start and End Points
+>**Note: THE FOLLOWING WILL ALTER THE FILE STRUCTURE AND IMAGE NAMES. DO NOT DO THE FOLLOWING ON ORIGINAL DATA!!**
 
-- You can do this with either filepaths of images or times.
+ - Open the script:
 
-## 5. Run 'SeeOtter_prepro_GUI_non_Waldo_with_GPS_fix.py'
+> HelperScripts/create_survey_from_waldo_images.py
 
-- Follow the instructions in your documentation.
+ - Set the "image_day" variable to point towards the day of data you want to import (this should end in "MM_DD")
+ - Run
 
-## 6. Open 'SeeOtter.exe'
+This should create a new survey with the name (*Location_YYYY_MM_DD*)
 
-- Create a new survey and start processing.
+The newly created survey should able to be processed as usual.
 
-## 7. Run 'SeeOtter_PostPro_Odd_Even.py' to Sum the Number of Individuals per Image and Remove Image Forelap
+# OtterChecker9000
 
-## 8. Final Results are a CSV with These Columns
+Start by running the script:
+
+> start_otter_checker.py
+
+It will load the survey given by "select_survey.py". Use the red/blue/green buttons to validate the predictions. Click 
+the save icon in the top right before exiting to save your progress.
+
+# Deploying Application
+
+To build a deployable application, run the powershell script:
+
+> SeeOtter/Deployment/build_application.ps1
+
+Then copy the folder 'yolov5' to the output folder contining the executable. Failing to do so will give you the following error:
+
+> AttributeError: 'NoneType' object has no attribute 'names'
+
+The executable can be found at:
+
+> SeeOtter\Deployment\dist\SeeOtter\SeeOtter.exe
+
+This uses the python package PyInstaller, and relies on you having the SeeOtter Anaconda environment and Powershell. If 
+you have issues running it. Make sure you have the SeeOtter Anaconda environment on your computer, and you're able to 
+activate it through Powershell.
+
+> (& "C:\ProgramData\Anaconda3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | Invoke-Expression
+
+> conda activate SeeOtter
+
+
+The build settings are defined in the 'SeeOtter.spec' file. Any files or 
+directories that need to be included in the application should be listed in this file under the Analysis.datas section 
+as such.
+
+    datas=[('../View/Images/*.jpg', 'View/Images'),
+           ('../View/Icons/*', 'View/Icons'),
+           ('../Surveys', 'Surveys')]
+
+Also, make sure your environment is using Pytorch-cpu when deploying. In theory, it should work with Pytorch-gpu, 
+but I haven't had any luck with it. Pyinstaller really doesn't play nicely with cuda. If you have access to the 
+SeeOtter(pytorch-cpu) conda environment, then the easiest way is to edit the "build_application.ps1" to point
+torwards that environment. 
