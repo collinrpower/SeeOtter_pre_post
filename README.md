@@ -167,3 +167,20 @@ Also, make sure your environment is using Pytorch-cpu when deploying. In theory,
 but I haven't had any luck with it. Pyinstaller really doesn't play nicely with cuda. If you have access to the 
 SeeOtter(pytorch-cpu) conda environment, then the easiest way is to edit the "build_application.ps1" to point
 torwards that environment. 
+
+# SeqApp updates
+SequentialApp Class: The main application class that defines the entire workflow through a series of steps. Each step represents a different task in the image processing pipeline:
+
+Backup Camera Files: Allows users to back up image files to multiple locations.
+Move Image Files: Organizes images into folders based on camera data.
+Extract Image Metadata: Extracts GPS metadata from images and verifies it.
+Assign Images to Transects: Assigns images to specific transects based on metadata.
+Run Preprocessing: Prepares images for further analysis by running preprocessing scripts.
+Change Model Weights: Updates model weights used for object detection.
+Edit Otter Checker Config: Allows the user to modify image tags and annotation categories.
+Run SeeOtter Processing: Processes images with SeeOtter and validates predictions.
+Final Processing: Completes the processing workflow with final checks.
+
+Step Navigation: The application guides users through each step sequentially, with options to go back, skip steps, or move to the next one. Each step includes specific instructions, and some allow interaction with the file system (e.g., browsing folders, selecting files).
+
+Configuration and Metadata Handling: The application reads and updates configurations, extracts metadata, and handles CSV files to store and manage the results.
