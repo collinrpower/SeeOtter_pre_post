@@ -4,6 +4,10 @@ SeeOtter is an AI-powered application designed to process and validate aerial wi
 
 ## Table of Contents
 - [Features](#features)
+
+
+
+
 - [System Requirements](#system-requirements)
 - [Installation](#installation)
 - [Usage](#usage)
