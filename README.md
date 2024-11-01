@@ -47,6 +47,12 @@ SeeOtter is an AI-powered application designed to process and validate aerial wi
    - **Images Path** (optional, defaults to `[ProjectPath]/Images`)
 3. To import Waldo data, select the "Create Survey from Waldo Data" option and provide the appropriate folder.
 
+   
+
+https://github.com/user-attachments/assets/ac662342-1a3e-4ca0-940f-aad12d530af5
+
+
+
 ### Running Predictions
 1. Go to the Survey Overview section and check if the survey has been processed.
 2. Click the green play button to start processing.
