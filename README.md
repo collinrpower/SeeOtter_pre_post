@@ -169,28 +169,27 @@ SeeOtter(pytorch-cpu) conda environment, then the easiest way is to edit the "bu
 torwards that environment. 
 
 # SeqApp updates
-SequentialApp Class: The main application class that defines the entire workflow through a series of steps. Each step represents a different task in the image processing pipeline:
+# SeeOtter Sequential Processing GUI
 
-Backup Camera Files: Allows users to back up image files to multiple locations.
+A Tkinter-based GUI application designed to streamline and automate image processing tasks for the SeeOtter project. This application allows users to perform a sequence of steps essential for preparing, processing, and validating wildlife imagery data, specifically targeting the detection and counting of sea otters in aerial imagery.
 
-Move Image Files: Organizes images into folders based on camera data.
+## Features
 
-Extract Image Metadata: Extracts GPS metadata from images and verifies it.
+- **Sequential Workflow**: Step-by-step guidance for each stage in the processing pipeline.
+- **Backup and Organization**: Easily back up camera files and organize them into folders.
+- **Metadata Extraction**: Extract GPS metadata from images to verify data quality.
+- **Transect Assignment**: Assign images to specific transects based on their metadata.
+- **Preprocessing**: Run preprocessing scripts to prepare images for analysis.
+- **Model Weight Management**: Update model weights used for AI-based image detection.
+- **Configuration Editing**: Modify image tags and annotation categories for the Otter Checker.
+- **Final Processing and Validation**: Complete image processing and validate predictions in mapping software.
 
-Assign Images to Transects: Assigns images to specific transects based on metadata.
+## Installation
 
-Run Preprocessing: Prepares images for further analysis by running preprocessing scripts.
+### Prerequisites
 
-Change Model Weights: Updates model weights used for object detection.
+- Python 3.8 or higher
+- Required libraries (install via `pip`):
+  ```bash
+  pip install pandas tk
 
-Edit Otter Checker Config: Allows the user to modify image tags and annotation categories.
-
-Run SeeOtter Processing: Processes images with SeeOtter and validates predictions.
-
-Final Processing: Completes the processing workflow with final checks.
-
-
-
-Step Navigation: The application guides users through each step sequentially, with options to go back, skip steps, or move to the next one. Each step includes specific instructions, and some allow interaction with the file system (e.g., browsing folders, selecting files).
-
-Configuration and Metadata Handling: The application reads and updates configurations, extracts metadata, and handles CSV files to store and manage the results.
