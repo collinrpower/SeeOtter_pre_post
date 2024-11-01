@@ -1,4 +1,82 @@
 # SeeOtter
+
+SeeOtter is an AI-powered application designed to process and validate aerial wildlife photography, specifically tailored to detect sea otters using YOLOv5. The application supports survey creation, image validation, and automated prediction generation, providing a streamlined tool for conservationists and wildlife managers.
+
+## Table of Contents
+- [Features](#features)
+- [System Requirements](#system-requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Creating a New Survey](#creating-a-new-survey)
+  - [Running Predictions](#running-predictions)
+  - [Image Validation](#image-validation)
+  - [Generating Results](#generating-results)
+- [Configuration](#configuration)
+- [Additional Settings](#additional-settings)
+- [Troubleshooting](#troubleshooting)
+
+## Features
+- **AI-Driven Detection**: Uses YOLOv5 for precise otter detection in high-resolution images.
+- **Multi-Step Processing Pipeline**: Pre-processing, prediction generation, and post-processing.
+- **Flexible Survey Management**: Supports new surveys, Waldo data import, and customizable file structures.
+- **Validation Tools**: Image validation with OtterChecker9000, annotation drawing, and filtering options.
+- **Transect Management**: Supports .kml transect files and manual transect assignment for accurate survey analysis.
+- **Ambiguous Validation Voting**: Enables multiple observers to resolve ambiguous predictions through majority voting.
+
+## System Requirements
+- **OS**: Windows
+- **RAM**: 8GB+ recommended
+- **GPU**: Nvidia GPU recommended
+
+## Installation
+1. Download the SeeOtter application files.
+2. Copy the folder to your computer.
+3. Run `SeeOtter.exe` from the main application folder.
+
+## Usage
+
+### Creating a New Survey
+1. Open the Survey Manager screen and click the blue plus button.
+2. Fill in the survey details:
+   - **Survey Name**
+   - **Project Path** (an existing folder)
+   - **Images Path** (optional, defaults to `[ProjectPath]/Images`)
+3. To import Waldo data, select the "Create Survey from Waldo Data" option and provide the appropriate folder.
+
+### Running Predictions
+1. Go to the Survey Overview section and check if the survey has been processed.
+2. Click the green play button to start processing.
+   - Progress and status updates will display during processing.
+
+### Image Validation
+1. Navigate to OtterChecker9000 to begin validation.
+2. Use the top toolbar or arrow keys for navigation:
+   - **Q**: Mark prediction as Correct
+   - **W**: Mark prediction as Incorrect
+   - **E**: Mark prediction as Ambiguous
+3. Draw annotations by enabling draw mode (pencil icon or `D` key).
+
+### Generating Results
+- Click the "Generate Results" button. Results will be saved to the **Results** folder.
+
+## Configuration
+The application settings are in two JSON files:
+- **see_otter_config.json**: Processing and runtime configurations.
+- **otter_checker_config.json**: Visual and behavior settings.
+
+Modify these files from the settings page or a text editor.
+
+## Additional Settings
+- **Transect Files**: Add .kml files to the Transects folder for automated assignments.
+- **Inclinometer Data**: Place inclinometer data files in the **InclinometerData** folder for orientation correction.
+
+## Troubleshooting
+- **GPU Not Detected**: Enable discrete GPU in settings if not automatically selected.
+- **Scaling Issues**: Adjust display scaling settings if portions of the screen are cut off.
+
+
+
+# SeeOtter
 Sea otter detection application for use in aerial photography surveys.
 
 # Requirements
