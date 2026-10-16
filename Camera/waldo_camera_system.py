@@ -8,9 +8,16 @@ from config import *
 @JsonConvert.register
 class WaldoCameraSystem(CameraSystem):
 
-    def __init__(self, name="Waldo Camera System", cameras=None):
-        left_camera = Camera("Waldo Left Camera", image_regex=WALDO_LEFT_CAMERA_REGEX,
-                             orientation=CameraCalibration(angle_y=WALDO_HORIZONTAL_FOV/2, hfov=WALDO_HORIZONTAL_FOV))
-        right_camera = Camera("Waldo Right Camera", image_regex=WALDO_RIGHT_CAMERA_REGEX, rotate_image=True,
-                              orientation=CameraCalibration(angle_y=-WALDO_HORIZONTAL_FOV/2, hfov=WALDO_HORIZONTAL_FOV))
-        super().__init__(name="Waldo Camera System", cameras=[left_camera, right_camera])
+    def __init__(self, name="Single Camera System", cameras=None):
+        camera = Camera(
+            "Any Camera",
+            image_regex="",
+            rotate_image=False,
+            orientation=CameraCalibration(
+                angle_x=0,
+                angle_y=0,
+                angle_z=0,
+                hfov=WALDO_HORIZONTAL_FOV
+            )
+        )
+        super().__init__(name=name, cameras=[camera])

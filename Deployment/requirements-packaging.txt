@@ -1,0 +1,12 @@
+# Add to the EXISTING working SeeOtter environment, using its Python.
+# This supplements that environment; it is not a tested inference dependency lock.
+PyInstaller==6.16.0
+pyinstaller-hooks-contrib==2025.8
+kivymd==1.1.1
+ExifRead
+piexif
+geopandas
+fiona
+pyproj
+simplekml
+semantic-version

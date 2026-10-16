@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+Deployment/build/
+Deployment/dist/
+Logs/
+Surveys/
+environment-before-packaging.txt
+Deployment/build-refresh/
+Deployment/refresh-output/
+BuildEnvironment/
+Backups/
+*.log
+otter_checker_config.json

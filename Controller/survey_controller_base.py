@@ -19,7 +19,7 @@ class SurveyControllerBase(EventDispatcher):
 
     def set_survey(self, survey: Survey, gui_threadsafe=False):
         if gui_threadsafe:
-            Clock.schedule_once(partial(self.set_survey, survey), -1)
+            Clock.schedule_once(lambda dt: self.set_survey(survey), -1)
         else:
             self.survey = survey
 

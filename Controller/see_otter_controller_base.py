@@ -2,7 +2,7 @@ import os
 from abc import abstractmethod
 from enum import Enum
 from functools import partial
-from kivy.clock import Clock
+from kivy.clock import Clock, mainthread
 from kivy.event import EventDispatcher
 from kivy.properties import ListProperty, ObjectProperty, NumericProperty, BooleanProperty, StringProperty
 from Config.otter_checker_config import OtterCheckerConfig
@@ -66,13 +66,20 @@ class SeeOtterControllerBase(SurveyControllerBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    @mainthread
+    def set_state(self, state, *args):
+        self.state = state
+
+    @mainthread
     def set_snackbar_message(self, message, *args, **kwargs):
         self.snackbar_message = ""
         self.snackbar_message = message
 
+    @mainthread
     def set_program_status_message(self, message, *args, **kwargs):
         self.program_status_message = message
 
+    @mainthread
     def set_idle_state(self, *args, **kwargs):
         self.state = SeeOtterState.SURVEY_LOADED if self.survey else SeeOtterState.NO_SURVEY_LOADED
         self.program_status_message = ""
