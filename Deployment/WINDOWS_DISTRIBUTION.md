@@ -92,7 +92,11 @@ environment; the old requirements.txt does not.
 ## What users receive
 
 `dist/SeeOtter-3.5.2-windows-x64.zip` contains the entire portable application
-folder. Extract it to a writable location such as Documents, then double-click
+folder. Because it exceeds GitHub's 2 GiB asset limit, the release also creates
+`.zip.001` / `.zip.002` parts and `Extract-SeeOtter.cmd`. Download both parts and
+the helper into one fresh folder, then double-click the helper to verify their
+checksums, join the ZIP, and extract it. Allow about 11 GB of free disk space.
+For a locally built complete ZIP, use Extract All. Then double-click
 SeeOtter.exe. Python and Conda are not required on the recipient's computer.
 Keep the entire folder together; copying the executable alone will not work.
 Keep surveys outside the application folder so replacing the app preserves data.

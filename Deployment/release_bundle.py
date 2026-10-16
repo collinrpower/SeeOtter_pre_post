@@ -6,6 +6,7 @@ import re
 import sys
 import zipfile
 from package_support import ROOT, sources, tools
+from release_downloads import prepare
 
 def sha256(path):
     digest = hashlib.sha256()
@@ -57,6 +58,7 @@ def release(bundle, reuse_verified_manifest=False):
                 output.write(path, Path(name + '-source') / relative)
     for path in (archive, source):
         path.with_suffix(path.suffix + '.sha256').write_text(sha256(path) + '  ' + path.name + '\n', encoding='utf-8')
+    prepare(archive)
     print(archive)
     print(source)
 

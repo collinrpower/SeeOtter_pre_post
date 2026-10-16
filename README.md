@@ -1,11 +1,14 @@
 # SeeOtter
 
-**[Download SeeOtter for Windows (64-bit)](https://github.com/collinrpower/SeeOtter_pre_post/releases/download/v3.5.1/SeeOtter-3.5.1-windows-x64.zip)**
+**[Download SeeOtter 3.5.2 for Windows (64-bit)](https://github.com/collinrpower/SeeOtter_pre_post/releases/tag/v3.5.2)**
 
-Download the ZIP, right-click it and choose **Extract All**, then open the extracted
-folder and double-click **SeeOtter.exe**. The Python runtime and dependencies are
-bundled; no separate Python or Conda installation is required. Keep the whole
-extracted folder together.
+Download both `.zip.001` and `.zip.002` files plus **Extract-SeeOtter.cmd** from
+the release into one fresh folder. Double-click **Extract-SeeOtter.cmd** to verify,
+join, and extract the application, then open the extracted folder and double-click
+**SeeOtter.exe**. Python and CUDA libraries are bundled. Detection automatically
+uses a compatible NVIDIA GPU or falls back to CPU. Keep the whole extracted folder
+together. The download has two parts because GitHub limits individual release files
+to 2 GiB. Allow about 11 GB of free space for downloads, the joined ZIP, and extraction.
 
 [Release notes, source archives, and checksums](https://github.com/collinrpower/SeeOtter_pre_post/releases/latest)
 
@@ -46,8 +49,8 @@ SeeOtter is an AI-powered application designed to process and validate aerial wi
 
 ## Installation
 
-1. Download **SeeOtter-3.5.1-windows-x64.zip** using the Windows download link above.
-2. Right-click the ZIP and choose **Extract All**. Use a writable location such as Documents.
+1. Download **SeeOtter-3.5.2-windows-x64.zip.001**, **SeeOtter-3.5.2-windows-x64.zip.002**, and **Extract-SeeOtter.cmd** from the release above into one fresh, writable folder.
+2. Double-click **Extract-SeeOtter.cmd** and wait for verification and extraction to finish. Keep the part filenames unchanged.
 3. Open the extracted folder and double-click **SeeOtter.exe** to open the launcher.
 4. Choose the survey manager or one of the preprocessing/postprocessing tools.
 
