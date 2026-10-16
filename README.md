@@ -112,6 +112,7 @@ Modify these files from the settings page or a text editor.
 - **Inclinometer Data**: Place inclinometer data files in the **InclinometerData** folder for orientation correction.
 
 ## Troubleshooting
+- **Images without EXIF**: Image dimensions are read from the raster header when EXIF dimensions are absent. Missing capture time and camera fields remain unknown and undated images use filename order. Set `FAIL_ON_MISSING_EXIF_FIELD` and `REQUIRE_GPS` to `false` in the application settings to allow images without that metadata. Georeferenced results still require appropriate GPS, altitude, and camera calibration data.
 - **GPU Not Detected**: Enable discrete GPU in settings if not automatically selected.
 - **Scaling Issues**: Adjust display scaling settings if portions of the screen are cut off.
 

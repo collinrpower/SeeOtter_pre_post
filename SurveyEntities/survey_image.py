@@ -74,6 +74,8 @@ class SurveyImage(object):
 
     @property
     def datetime_obj(self):
+        if not self.datetime:
+            return None
         try:
             return datetime.datetime.strptime(self.datetime, "%Y:%m:%d %H:%M:%S")
         except Exception as ex:
@@ -159,7 +161,7 @@ class SurveyImage(object):
 
     def load_gps_data(self):
         try:
-            gps_data = gpsphoto.getGPSData(self.file_path)
+            gps_data = gpsphoto.getGPSData(self.file_path) or {}
             lat = gps_data['Latitude']
             lon = gps_data['Longitude']
             alt = gps_data['Altitude']

@@ -46,13 +46,13 @@ class ImageInfoCard(StackCard):
 
     def set_fields(self, image: SurveyImage):
         self.image_name.value = image.file_name
-        self.created_dttm.value = image.datetime
+        self.created_dttm.value = image.datetime or "Unknown"
         self.lattitude.value = str(image.latitude)
         self.longitude.value = str(image.longitude)
         self.altitude.value = f"{image.altitude}m ({image.altitude_ft}ft)"
-        self.iso.value = image.metadata.iso
-        self.fstop.value = "f/" + image.metadata.fstop
-        self.exposure.value = image.metadata.exposure
+        self.iso.value = image.metadata.iso or "Unknown"
+        self.fstop.value = "f/" + image.metadata.fstop if image.metadata.fstop else "Unknown"
+        self.exposure.value = image.metadata.exposure or "Unknown"
 
     def update_fields(self, value, instance):
         image = self.controller.current_image
