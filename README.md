@@ -253,37 +253,19 @@ the save icon in the top right before exiting to save your progress.
 
 # Deploying Application
 
-To build a deployable application, run the powershell script:
+Follow the [Windows distribution instructions](Deployment/WINDOWS_DISTRIBUTION.md)
+to create an isolated Python 3.9 environment with the pinned CUDA-enabled runtime,
+then build from the repository root:
 
-> SeeOtter/Deployment/build_application.ps1
+```powershell
+.\Build-SeeOtter.ps1 -Python "$PWD\BuildEnvironment\Scripts\python.exe"
+```
 
-Then copy the folder 'yolov5' to the output folder contining the executable. Failing to do so will give you the following error:
+The current build supports both GPU and CPU detection. It rejects CPU-only Torch
+at build time, bundles model weights and dependencies, and checks CPU fallback
+and application startup before generating release files. No manual YOLOv5 copy
+is required. The executable is `Deployment\dist\SeeOtter\SeeOtter.exe`.
 
-> AttributeError: 'NoneType' object has no attribute 'names'
-
-The executable can be found at:
-
-> SeeOtter\Deployment\dist\SeeOtter\SeeOtter.exe
-
-This uses the python package PyInstaller, and relies on you having the SeeOtter Anaconda environment and Powershell. If 
-you have issues running it. Make sure you have the SeeOtter Anaconda environment on your computer, and you're able to 
-activate it through Powershell.
-
-> (& "C:\ProgramData\Anaconda3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | Invoke-Expression
-
-> conda activate SeeOtter
-
-
-The build settings are defined in the 'SeeOtter.spec' file. Any files or 
-directories that need to be included in the application should be listed in this file under the Analysis.datas section 
-as such.
-
-    datas=[('../View/Images/*.jpg', 'View/Images'),
-           ('../View/Icons/*', 'View/Icons'),
-           ('../Surveys', 'Surveys')]
-
-Also, make sure your environment is using Pytorch-cpu when deploying. In theory, it should work with Pytorch-gpu, 
-but I haven't had any luck with it. Pyinstaller really doesn't play nicely with cuda. If you have access to the 
-SeeOtter(pytorch-cpu) conda environment, then the easiest way is to edit the "build_application.ps1" to point
-torwards that environment. 
+Release ZIPs larger than GitHub's 2 GiB limit are split into download parts with
+the Windows extraction helper. The complete local ZIP is also retained.
 
