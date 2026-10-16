@@ -1,4 +1,4 @@
-param([string]$Python = 'python', [string]$ArchivePython = '')
+param([string]$Python = 'python', [string]$ArchivePython = '', [switch]$CpuOnly)
 $ErrorActionPreference = 'Stop'
 if (-not $ArchivePython) { $ArchivePython = $Python }
 $env:KIVY_NO_ARGS = '1'
@@ -7,7 +7,9 @@ Push-Location $PSScriptRoot
 try {
     & $Python -m pip check
     if ($LASTEXITCODE -ne 0) { throw 'The Python environment has conflicting dependencies.' }
-    & $Python "$PSScriptRoot/preflight.py" --require-cuda
+    $PreflightArguments = @()
+    if (-not $CpuOnly) { $PreflightArguments += '--require-cuda' }
+    & $Python "$PSScriptRoot/preflight.py" @PreflightArguments
     if ($LASTEXITCODE -ne 0) { throw 'Preflight failed; no release was built.' }
     & $Python -m PyInstaller --noconfirm --clean --distpath "$PSScriptRoot/dist" --workpath "$PSScriptRoot/build" "$PSScriptRoot/SeeOtter.spec"
     if ($LASTEXITCODE -ne 0) { throw 'PyInstaller failed.' }

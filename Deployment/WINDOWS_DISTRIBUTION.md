@@ -27,6 +27,19 @@ that all requirements were installed. Do not use that file to reproduce a releas
 
 ## Build with the existing working environment
 
+### CPU-only portable build
+
+To rebuild with an existing working CPU-only Python 3.9 x64 environment, select
+that environment's Python and pass `-CpuOnly`:
+
+```powershell
+.\Build-SeeOtter.ps1 -Python "path\to\cpu-environment\python.exe" -CpuOnly
+```
+
+This skips the CUDA-wheel requirement while retaining dependency, EXIF-free
+survey import, inference, GUI, and release-archive checks. The default build
+still requires CUDA-enabled Torch for the GPU + CPU distribution.
+
 ### GPU and CPU portable build
 
 Build with CUDA-enabled Torch so the same executable can automatically select

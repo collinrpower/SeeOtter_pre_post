@@ -14,4 +14,4 @@ Format: ('major.minor.patch')
 **************************************
 """
 
-version = semantic_version.Version('3.5.2')
+version = semantic_version.Version('3.5.3')

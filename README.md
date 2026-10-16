@@ -4,7 +4,7 @@
 
 | Version | Detection hardware | Download |
 | --- | --- | --- |
-| **CPU only — 3.5.1** | CPU | [Download Windows ZIP](https://github.com/collinrpower/SeeOtter_pre_post/releases/download/v3.5.1/SeeOtter-3.5.1-windows-x64.zip) |
+| **CPU only — 3.5.3** | CPU | [Download Windows ZIP](https://github.com/collinrpower/SeeOtter_pre_post/releases/download/v3.5.3/SeeOtter-3.5.3-windows-x64.zip) |
 | **GPU + CPU — 3.5.2** | Compatible NVIDIA GPU, with automatic CPU fallback | [Download release files](https://github.com/collinrpower/SeeOtter_pre_post/releases/tag/v3.5.2) |
 
 For **CPU only**, download the ZIP and choose **Extract All**.
