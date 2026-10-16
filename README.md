@@ -9,6 +9,10 @@
 
 For **CPU only**, download the ZIP and choose **Extract All**.
 
+For images without EXIF metadata, use **CPU only 3.5.3**, which includes the
+image-import hotfix. The existing GPU + CPU 3.5.2 download predates this fix;
+the current source includes it for either build mode.
+
 For **GPU + CPU**, download both `.zip.001` and `.zip.002` files plus
 **Extract-SeeOtter.cmd** into one fresh folder. Double-click the helper to verify,
 join, and extract the application. This download has two parts because GitHub
