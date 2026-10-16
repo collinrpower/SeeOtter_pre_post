@@ -1,14 +1,22 @@
 # SeeOtter
 
-**[Download SeeOtter 3.5.2 for Windows (64-bit)](https://github.com/collinrpower/SeeOtter_pre_post/releases/tag/v3.5.2)**
+## Windows downloads (64-bit)
 
-Download both `.zip.001` and `.zip.002` files plus **Extract-SeeOtter.cmd** from
-the release into one fresh folder. Double-click **Extract-SeeOtter.cmd** to verify,
-join, and extract the application, then open the extracted folder and double-click
-**SeeOtter.exe**. Python and CUDA libraries are bundled. Detection automatically
-uses a compatible NVIDIA GPU or falls back to CPU. Keep the whole extracted folder
-together. The download has two parts because GitHub limits individual release files
-to 2 GiB. Allow about 11 GB of free space for downloads, the joined ZIP, and extraction.
+| Version | Detection hardware | Download |
+| --- | --- | --- |
+| **CPU only — 3.5.1** | CPU | [Download Windows ZIP](https://github.com/collinrpower/SeeOtter_pre_post/releases/download/v3.5.1/SeeOtter-3.5.1-windows-x64.zip) |
+| **GPU + CPU — 3.5.2** | Compatible NVIDIA GPU, with automatic CPU fallback | [Download release files](https://github.com/collinrpower/SeeOtter_pre_post/releases/tag/v3.5.2) |
+
+For **CPU only**, download the ZIP and choose **Extract All**.
+
+For **GPU + CPU**, download both `.zip.001` and `.zip.002` files plus
+**Extract-SeeOtter.cmd** into one fresh folder. Double-click the helper to verify,
+join, and extract the application. This download has two parts because GitHub
+limits individual release files to 2 GiB. Allow about 11 GB of free disk space.
+
+Open the extracted folder and double-click **SeeOtter.exe**. Both versions bundle
+Python and application dependencies; the GPU + CPU version also bundles CUDA
+libraries. Keep the whole extracted application folder together.
 
 [Release notes, source archives, and checksums](https://github.com/collinrpower/SeeOtter_pre_post/releases/latest)
 
@@ -49,8 +57,8 @@ SeeOtter is an AI-powered application designed to process and validate aerial wi
 
 ## Installation
 
-1. Download **SeeOtter-3.5.2-windows-x64.zip.001**, **SeeOtter-3.5.2-windows-x64.zip.002**, and **Extract-SeeOtter.cmd** from the release above into one fresh, writable folder.
-2. Double-click **Extract-SeeOtter.cmd** and wait for verification and extraction to finish. Keep the part filenames unchanged.
+1. Choose **CPU only** or **GPU + CPU** from the download table above.
+2. For **CPU only**, extract the single ZIP using **Extract All**. For **GPU + CPU**, place both download parts and **Extract-SeeOtter.cmd** in one fresh, writable folder, then double-click the helper. Keep the part filenames unchanged.
 3. Open the extracted folder and double-click **SeeOtter.exe** to open the launcher.
 4. Choose the survey manager or one of the preprocessing/postprocessing tools.
 
