@@ -1,5 +1,10 @@
 # SeeOtter
 
+For the Windows distribution build kit, including all additional preprocessing,
+postprocessing and helper scripts, see [Windows distribution instructions](Deployment/WINDOWS_DISTRIBUTION.md).
+These instructions replace the legacy deployment commands below. The kit needs
+validation in a working SeeOtter inference environment before release.
+
 SeeOtter is an AI-powered application designed to process and validate aerial wildlife photography, specifically tailored to detect sea otters using YOLOv5. The application supports survey creation, image validation, and automated prediction generation, providing a streamlined tool for conservationists and wildlife managers.
 
 ## Table of Contents

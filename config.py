@@ -26,7 +26,7 @@ RESULTS_DIR = 'Results'
 AMBIGUOUS_VOTE_DIR = f"{RESULTS_DIR}/AmbiguousVote"
 
 # Files
-IMAGE_EXT = '.JPG'
+IMAGE_EXT = ('.JPG', '.JPEG', '.PNG', '.TIF', '.TIFF', '.BMP')
 USER_GUIDE_FILE = "SeeOtterUserGuide.docx"
 OTTER_CHECKER_CONFIG_FILE = 'otter_checker_config.json'
 SEE_OTTER_CONFIG_FILE = 'see_otter_config.json'

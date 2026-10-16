@@ -1,6 +1,7 @@
 import asyncio
 import subprocess
 import threading
+import traceback
 from functools import partial
 from os.path import realpath
 from pathlib import Path
@@ -68,7 +69,7 @@ class SurveyCommandController(EventDispatcher):
         def command_task(command_controller: SurveyCommandController, command, action_name, refresh):
             controller = command_controller.controller
             try:
-                controller.state = SeeOtterState.RUNNING_COMMAND
+                controller.set_state(SeeOtterState.RUNNING_COMMAND)
                 command_controller.set_current_command(action_name)
                 Clock.schedule_once(partial(controller.set_snackbar_message, f"Running: {action_name}"))
                 command()
@@ -76,6 +77,7 @@ class SurveyCommandController(EventDispatcher):
                 if refresh:
                     Clock.schedule_once(controller.refresh_survey)
             except Exception as ex:
+                traceback.print_exc()
                 message = f"Error running command ({action_name}): " + str(ex)
                 Clock.schedule_once(partial(controller.set_snackbar_message, message))
             finally:
@@ -85,6 +87,7 @@ class SurveyCommandController(EventDispatcher):
         action_name = action_name or "command"
         command_thread = threading.Thread(target=command_task, args=(self, command, action_name, refresh,))
         command_thread.start()
+        return command_thread
 
     def run_command_on_user_prompt(self, prompt, command, action_name, refresh=True):
 
@@ -104,7 +107,7 @@ class SurveyCommandController(EventDispatcher):
         def load_survey_task(controller: SeeOtterControllerBase,
                              command_controller: SurveyCommandController,
                              img_dir=None):
-            controller.state = SeeOtterState.LOADING_SURVEY
+            controller.set_state(SeeOtterState.LOADING_SURVEY)
             Clock.schedule_once(partial(controller.set_program_status_message, f"Loading survey: {survey}"))
             if isinstance(survey, Survey):
                 controller.set_survey(survey, gui_threadsafe=True)
@@ -117,7 +120,7 @@ class SurveyCommandController(EventDispatcher):
                                                     "project...")
                     survey_path = Path(survey).parent
                     Survey.upgrade_project_version(survey_path=survey_path, survey_type=WaldoSurvey, force=True)
-                    controller.survey = Survey.load(survey)
+                    controller.set_survey(Survey.load(survey), gui_threadsafe=True)
                 except ImageDirNotFoundException as idnfe:
                     PromptUserNotification.raise_prompt(f"{idnfe}\n\nLocate and "
                                                         f"update images folder?")
@@ -255,23 +258,23 @@ class SurveyCommandController(EventDispatcher):
             controller = command_controller.controller
             command_controller.reset_exit_flag()
             try:
-                controller.state = SeeOtterState.PRE_PROCESSING
+                controller.set_state(SeeOtterState.PRE_PROCESSING)
                 pre_processing(controller.survey)
-                controller.state = SeeOtterState.RUNNING_IMAGE_DETECTION
+                controller.set_state(SeeOtterState.RUNNING_IMAGE_DETECTION)
                 run_image_detection(controller.survey, progress_callback=command_controller.set_command_progress,
                                     exit_flag=command_controller.exit_flag)
-                controller.state = SeeOtterState.POST_PROCESSING
+                controller.set_state(SeeOtterState.POST_PROCESSING)
                 post_processing(controller.survey)
-                controller.state = SeeOtterState.SAVING_SURVEY
+                controller.set_state(SeeOtterState.SAVING_SURVEY)
                 controller.survey.save()
             except Exception as ex:
                 print(f"Error while processing: {ex}")
+                raise
             finally:
-                controller.set_idle_state()
                 command_controller.reset_exit_flag()
 
         if self.controller.state == SeeOtterState.SURVEY_LOADED:
-            self.run_command(command=partial(processing_task, self,), action_name="Run Processing")
+            return self.run_command(command=partial(processing_task, self,), action_name="Run Processing")
         else:
             print(f"Warning: Cannot run processing while program state is '{self.controller.state.name}'")
 

@@ -352,7 +352,7 @@ class Survey(object):
             errors = []
             image_paths.set_description("Loading Images".ljust(PROGRESS_BAR_LABEL_PADDING))
             for (filename, path) in image_paths:
-                if str(filename).upper().endswith(IMAGE_EXT.upper()):
+                if str(filename).upper().endswith(tuple(ext.upper() for ext in IMAGE_EXT)):
                     try:
                         images.append(SurveyImage(path))
                     except Exception as ex:
