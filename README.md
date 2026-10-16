@@ -1,9 +1,16 @@
 # SeeOtter
 
-For the Windows distribution build kit, including all additional preprocessing,
-postprocessing and helper scripts, see [Windows distribution instructions](Deployment/WINDOWS_DISTRIBUTION.md).
-These instructions replace the legacy deployment commands below. The kit needs
-validation in a working SeeOtter inference environment before release.
+**[Download SeeOtter for Windows (64-bit)](https://github.com/collinrpower/SeeOtter_pre_post/releases/download/v3.5.1/SeeOtter-3.5.1-windows-x64.zip)**
+
+Download the ZIP, right-click it and choose **Extract All**, then open the extracted
+folder and double-click **SeeOtter.exe**. The Python runtime and dependencies are
+bundled; no separate Python or Conda installation is required. Keep the whole
+extracted folder together.
+
+[Release notes, source archives, and checksums](https://github.com/collinrpower/SeeOtter_pre_post/releases/latest)
+
+For rebuilding the application or developing from source, see the
+[Windows distribution instructions](Deployment/WINDOWS_DISTRIBUTION.md).
 
 SeeOtter is an AI-powered application designed to process and validate aerial wildlife photography, specifically tailored to detect sea otters using YOLOv5. The application supports survey creation, image validation, and automated prediction generation, providing a streamlined tool for conservationists and wildlife managers.
 
@@ -38,9 +45,17 @@ SeeOtter is an AI-powered application designed to process and validate aerial wi
 - **GPU**: Nvidia GPU recommended
 
 ## Installation
-1. Download the SeeOtter application files.
-2. Copy the folder to your computer.
-3. Run `SeeOtter.exe` from the main application folder.
+
+1. Download **SeeOtter-3.5.1-windows-x64.zip** using the Windows download link above.
+2. Right-click the ZIP and choose **Extract All**. Use a writable location such as Documents.
+3. Open the extracted folder and double-click **SeeOtter.exe** to open the launcher.
+4. Choose the survey manager or one of the preprocessing/postprocessing tools.
+
+The Windows release includes the model weights, libraries, and user guide. Keep
+all extracted files together and save surveys outside the application folder.
+The executable is unsigned, so Windows may display a publisher warning.
+GitHub's **Code > Download ZIP** and the source archives contain development files;
+use the Windows release ZIP for the ready-to-run application.
 
 ## Usage
 
@@ -94,7 +109,7 @@ Modify these files from the settings page or a text editor.
 # SeeOtter
 Sea otter detection application for use in aerial photography surveys.
 
-# Requirements
+# Requirements for running from source (developers)
 
  - Windows
  - Conda
@@ -260,3 +275,4 @@ Also, make sure your environment is using Pytorch-cpu when deploying. In theory,
 but I haven't had any luck with it. Pyinstaller really doesn't play nicely with cuda. If you have access to the 
 SeeOtter(pytorch-cpu) conda environment, then the easiest way is to edit the "build_application.ps1" to point
 torwards that environment. 
+
