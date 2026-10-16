@@ -320,7 +320,7 @@ def get_distinct_predictions_for_image(image: SurveyImage, survey: Survey):
         remove_empty_elements(overlap_images)
         overlap_images = [survey.get_image(image_name) for image_name in overlap_images]
         for overlap_image in overlap_images:
-            if overlap_image.datetime > image.datetime:
+            if overlap_image.datetime and image.datetime and overlap_image.datetime > image.datetime:
                 distinct_predictions.remove(prediction)
                 break
     return distinct_predictions

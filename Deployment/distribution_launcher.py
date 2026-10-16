@@ -40,6 +40,30 @@ def self_test(root, require_gpu=False):
         path = Path(temporary) / 'test.shp'
         gpd.GeoDataFrame({'id': [1]}, geometry=[Point(0, 0)], crs='EPSG:4326').to_file(path)
         assert len(gpd.read_file(path)) == 1
+    # Exercise import of plain raster files, not just dependency imports.
+    from PIL import Image
+    from Config.see_otter_config import SeeOtterConfig
+    from SurveyEntities.survey import Survey
+    from SurveyEntities.waldo_survey import WaldoSurvey
+    config = SeeOtterConfig.instance()
+    previous_policy = config.REQUIRE_GPS, config.FAIL_ON_MISSING_EXIF_FIELD
+    try:
+        config.REQUIRE_GPS = config.FAIL_ON_MISSING_EXIF_FIELD = False
+        with tempfile.TemporaryDirectory() as temporary:
+            folder = Path(temporary)
+            images = folder / 'images'
+            images.mkdir()
+            for extension in ('.jpg', '.jpeg', '.png', '.tif', '.tiff', '.bmp'):
+                Image.new('RGB', (48, 32)).save(images / ('frame' + extension))
+            survey = WaldoSurvey.new('metadata-smoke-test', survey_path=str(folder / 'project'),
+                                     images_dir=str(images))
+            assert survey.num_images == 6, survey.num_images
+            assert all(image.resolution == (48, 32) for image in survey.images)
+            assert all(image.datetime is None for image in survey.images)
+            assert Survey.load(str(folder / 'project')).num_images == 6
+            print('PASS: EXIF-free JPG/JPEG/PNG/TIFF/BMP survey import, dimensions, save and reload')
+    finally:
+        config.REQUIRE_GPS, config.FAIL_ON_MISSING_EXIF_FIELD = previous_policy
     import Processing.predict
     import numpy as np
     import torch

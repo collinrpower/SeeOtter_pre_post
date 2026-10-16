@@ -532,10 +532,11 @@ class Survey(object):
         return self.version.major < version.major
 
     def order_images_by_type_and_datetime(self):
-        if self.camera_system:
-            self.images = sorted(self.images, key=lambda img: (img.camera.name, img.datetime))
-        else:
-            self.images = sorted(self.images, key=lambda img: img.datetime)
+        # Keep undated frames in stable filename order without inventing capture times.
+        self.images = sorted(self.images, key=lambda img: (
+            img.camera.name if self.camera_system else "",
+            not bool(img.datetime), img.datetime or "", img.file_name.casefold(),
+            img.file_path.casefold()))
 
     def assign_image_ids(self):
         for index, image in enumerate(self.images):
@@ -692,7 +693,13 @@ class Survey(object):
             return
         inclinometer_df = pd.DataFrame({"datetime": [record.datetime for record in inclinometer_data],
                                         "inclinometer_record": inclinometer_data})
-        image_df = pd.DataFrame({"datetime": [image.datetime_obj for image in self.images], "image": self.images})
+        dated_images = [(image, image.datetime_obj) for image in self.images]
+        dated_images = [(image, date) for image, date in dated_images if date is not None]
+        if not dated_images:
+            print("No image capture times available. Skipping inclinometer matching.")
+            return
+        image_df = pd.DataFrame({"datetime": [date for _, date in dated_images],
+                                 "image": [image for image, _ in dated_images]})
         inclinometer_df.set_index("datetime")
         image_df.set_index("datetime")
         merged_df = pd.merge_asof(left=image_df.sort_values("datetime"), right=inclinometer_df.sort_values("datetime"),
