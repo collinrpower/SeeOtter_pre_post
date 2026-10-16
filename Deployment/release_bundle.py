@@ -53,7 +53,7 @@ def release(bundle, reuse_verified_manifest=False):
     with zipfile.ZipFile(source, 'w', zipfile.ZIP_DEFLATED, compresslevel=3) as output:
         for path in sorted(ROOT.rglob('*')):
             relative = path.relative_to(ROOT)
-            if path.is_file() and path.name != 'otter_checker_config.json' and not set(relative.parts) & {'.git', 'dist', 'build', 'build-refresh', 'refresh-output', '__pycache__', 'Logs', 'Surveys'}:
+            if path.is_file() and path.name != 'otter_checker_config.json' and not set(relative.parts) & {'.git', 'dist', 'build', 'build-refresh', 'refresh-output', 'BuildEnvironment', 'Backups', '__pycache__', 'Logs', 'Surveys'}:
                 output.write(path, Path(name + '-source') / relative)
     for path in (archive, source):
         path.with_suffix(path.suffix + '.sha256').write_text(sha256(path) + '  ' + path.name + '\n', encoding='utf-8')

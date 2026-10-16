@@ -15,7 +15,7 @@ TOOLS = {
     'gis': ('Export camera polygons and points', 'SeeOtter_Project_Processed_Data.py'),
 }
 REQUIRED = ('exifread', 'exif', 'GPSPhoto.gpsphoto', 'PIL.Image', 'piexif',
-            'numpy', 'pandas', 'scipy', 'geopandas', 'fiona', 'pyproj',
+            'numpy', 'pandas', 'scipy', 'geopandas', 'fiona', 'pyproj', 'pyogrio',
             'shapely', 'folium', 'geopy', 'pykml', 'simplekml', 'jsonpickle',
             'semantic_version', 'kivy', 'kivymd', 'tkinter', 'torch',
             'torchvision', 'sahi.model', 'sahi.predict', 'yolov5', 'tqdm')

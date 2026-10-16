@@ -43,5 +43,15 @@ class PackagingTests(unittest.TestCase):
         with self.assertRaisesRegex(FileNotFoundError, 'SeeOtter.exe'):
             release_bundle.verify(inventory.ROOT / 'nonexistent-test-bundle')
 
+    def test_cpu_only_torch_blocks_gpu_distribution(self):
+        with patch('torch.version.cuda', None):
+            self.assertEqual(preflight.check(require_cuda=True), 1)
+
+    def test_cuda_build_can_be_packaged_without_gpu(self):
+        # A builder need not have a GPU; the bundled CUDA runtime is required.
+        with patch('torch.version.cuda', '11.3'), \
+             patch('torch.cuda.is_available', return_value=False):
+            self.assertEqual(preflight.check(require_cuda=True), 0)
+
 if __name__ == '__main__':
     unittest.main()

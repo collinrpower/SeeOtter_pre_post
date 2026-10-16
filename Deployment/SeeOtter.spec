@@ -18,7 +18,7 @@ for filename in ('LICENSE', 'README.md', 'SeeOtterUserGuide.docx', 'see_otter_co
 datas.append((str(deployment / 'WINDOWS_DISTRIBUTION.md'), '.'))
 binaries = []
 hidden = external_imports() + ['tkinter.ttk']
-for package in ('kivymd', 'sahi', 'yolov5', 'geopandas', 'fiona', 'pyproj'):
+for package in ('kivymd', 'sahi', 'yolov5', 'geopandas', 'fiona', 'pyproj', 'pyogrio'):
     package_datas, package_binaries, package_hidden = collect_all(package)
     datas += package_datas
     binaries += package_binaries

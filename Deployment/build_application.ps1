@@ -1,11 +1,13 @@
 param([string]$Python = 'python', [string]$ArchivePython = '')
 $ErrorActionPreference = 'Stop'
 if (-not $ArchivePython) { $ArchivePython = $Python }
+$env:KIVY_NO_ARGS = '1'
+$env:KIVY_HOME = Join-Path $PSScriptRoot '../Logs/kivy'
 Push-Location $PSScriptRoot
 try {
     & $Python -m pip check
     if ($LASTEXITCODE -ne 0) { throw 'The Python environment has conflicting dependencies.' }
-    & $Python "$PSScriptRoot/preflight.py"
+    & $Python "$PSScriptRoot/preflight.py" --require-cuda
     if ($LASTEXITCODE -ne 0) { throw 'Preflight failed; no release was built.' }
     & $Python -m PyInstaller --noconfirm --clean --distpath "$PSScriptRoot/dist" --workpath "$PSScriptRoot/build" "$PSScriptRoot/SeeOtter.spec"
     if ($LASTEXITCODE -ne 0) { throw 'PyInstaller failed.' }
@@ -18,6 +20,14 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Dependency notice collection failed.' }
     & "$Bundle/SeeOtter.exe" --self-test
     if ($LASTEXITCODE -ne 0) { throw 'Frozen self-test failed. Do not distribute this build.' }
+    $PreviousCudaDevices = $env:CUDA_VISIBLE_DEVICES
+    try {
+        $env:CUDA_VISIBLE_DEVICES = '-1'
+        & "$Bundle/SeeOtter.exe" --self-test
+        if ($LASTEXITCODE -ne 0) { throw 'Frozen CPU fallback self-test failed.' }
+    } finally {
+        $env:CUDA_VISIBLE_DEVICES = $PreviousCudaDevices
+    }
     & "$Bundle/SeeOtter.exe" --gui-smoke-test
     if ($LASTEXITCODE -ne 0) { throw 'Application GUI startup failed.' }
     foreach ($Tool in @('preprocess', 'gps', 'copy-waldo', 'move-waldo', 'postprocess', 'gis')) {

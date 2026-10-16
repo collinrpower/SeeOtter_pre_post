@@ -5,7 +5,8 @@ import platform
 import sys
 from package_support import REQUIRED, ROOT, tools
 
-def check():
+def check(require_cuda=False):
+    os.environ['KIVY_NO_ARGS'] = '1'
     (ROOT / 'Logs').mkdir(exist_ok=True)
     os.environ.setdefault('KIVY_HOME', str(ROOT / 'Logs' / 'kivy'))
     print('Build Python:', sys.executable, sys.version)
@@ -22,6 +23,16 @@ def check():
         from sahi.utils.yolov5 import download_yolov5s6_model
     except Exception as error:
         failures.append(f'Legacy SAHI API required by Processing/predict.py: {error}')
+    if require_cuda:
+        try:
+            import torch
+            print('Torch:', torch.__version__, 'CUDA runtime:', torch.version.cuda,
+                  'GPU available:', torch.cuda.is_available())
+            if torch.version.cuda is None:
+                failures.append('CUDA-enabled Torch is required for the GPU/CPU distribution. '
+                                'Install Deployment/requirements-cuda.txt in the build environment.')
+        except Exception as error:
+            failures.append(f'CUDA build check: {error}')
     for relative in [entry[1] for entry in tools().values()] + [
             'ModelWeights/best.pt', 'SeeOtterUserGuide.docx', 'LICENSE',
             'Deployment/yolov5/hubconf.py']:
@@ -36,4 +47,7 @@ def check():
     return 0
 
 if __name__ == '__main__':
-    raise SystemExit(check())
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--require-cuda', action='store_true')
+    raise SystemExit(check(require_cuda=parser.parse_args().require_cuda))

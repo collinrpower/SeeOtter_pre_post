@@ -27,6 +27,36 @@ that all requirements were installed. Do not use that file to reproduce a releas
 
 ## Build with the existing working environment
 
+### GPU and CPU portable build
+
+Build with CUDA-enabled Torch so the same executable can automatically select
+a compatible NVIDIA GPU or fall back to CPU. A CPU-only Torch wheel cannot use
+a GPU, regardless of the recipient's installed CUDA tools. This legacy runtime
+targets CUDA 11.3; newer GPU architectures may require a newer inference stack.
+
+Create an isolated Python 3.9 x64 environment from the repository root:
+
+```powershell
+python -m venv BuildEnvironment
+.\BuildEnvironment\Scripts\python.exe -m pip install -r Deployment/requirements-runtime.txt
+.\BuildEnvironment\Scripts\python.exe -m pip check
+.\BuildEnvironment\Scripts\python.exe Deployment/preflight.py --require-cuda
+.\Build-SeeOtter.ps1 -Python "$PWD\BuildEnvironment\Scripts\python.exe"
+```
+
+The build rejects CPU-only Torch, tests automatic device selection, and reruns
+the frozen inference self-test with CUDA hidden to check CPU fallback. Detection
+prints the selected device, Torch version, CUDA runtime, and GPU name. On a GPU
+test computer, run `SeeOtter.exe --self-test --require-gpu` to require actual GPU
+inference. Users need a compatible NVIDIA driver but no Python or separate CUDA
+toolkit. Keep all bundled files together, including the large torch/lib DLLs.
+From a fresh PowerShell process in the repository root,
+`./Test-Standalone.ps1 -RequireGpu` checks GPU inference, CPU fallback, and all
+GUI entry points with development Python/Conda settings removed.
+
+The requirements pin the recorded runtime's direct dependencies; they are not
+a complete transitive dependency lock. Save the successful build's `pip freeze`.
+
 Use the environment that can already run SeeOtter from source. The repository
 documents Python 3.9 and an older Torch/SAHI/YOLOv5 stack. Its inference code uses
 `sahi.model.Yolov5DetectionModel`; upgrading SAHI or Torch indiscriminately can
@@ -35,11 +65,12 @@ are not a complete, tested dependency lock. Preserve your working inference
 versions and resolve any preflight errors before freezing.
 
 ```powershell
-conda activate "SeeOtter(torch-cpu)"
+conda activate "SeeOtter-cuda"
 python -m pip freeze > .\environment-before-packaging.txt
+python -m pip install -r .\requirements-cuda.txt
 python -m pip install -r .\requirements-packaging.txt
 python -m pip check
-python .\preflight.py
+python .\preflight.py --require-cuda
 .\build_application.ps1 -Python (Get-Command python).Source
 ```
 
@@ -60,7 +91,7 @@ environment; the old requirements.txt does not.
 
 ## What users receive
 
-`dist/SeeOtter-3.5.1-windows-x64.zip` contains the entire portable application
+`dist/SeeOtter-3.5.2-windows-x64.zip` contains the entire portable application
 folder. Extract it to a writable location such as Documents, then double-click
 SeeOtter.exe. Python and Conda are not required on the recipient's computer.
 Keep the entire folder together; copying the executable alone will not work.

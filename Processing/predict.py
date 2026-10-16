@@ -3,6 +3,7 @@ from sahi.model import Yolov5DetectionModel
 from sahi.predict import get_sliced_prediction, get_prediction
 from sahi.utils.yolov5 import download_yolov5s6_model
 from tqdm import tqdm
+import torch
 
 from Config.see_otter_config import SeeOtterConfig
 from Utilities.exit_flag import ExitFlag
@@ -28,9 +29,12 @@ download_yolov5s6_model(model_weights_path)
 detection_model = Yolov5DetectionModel(
     model_path=model_weights_path,
     confidence_threshold=config().PREDICTION_CONFIDENCE_CUTOFF,
-    #device="cpu"
-    #device="cuda:0"
+    device="cuda:0" if torch.cuda.is_available() else "cpu",
 )
+print(f"Detection device: {detection_model.device}; Torch {torch.__version__}; "
+      f"CUDA runtime: {torch.version.cuda}")
+if str(detection_model.device).startswith("cuda"):
+    print(f"Detection GPU: {torch.cuda.get_device_name(0)}")
 
 
 def run_image_detection(survey: Survey, progress_callback=None, exit_flag: ExitFlag=None):

@@ -21,7 +21,7 @@ def configure(root):
     os.environ.setdefault('KIVY_HOME', str(root / 'Logs' / 'kivy'))
     os.environ['KIVY_NO_ARGS'] = '1'
 
-def self_test(root):
+def self_test(root, require_gpu=False):
     for name in REQUIRED:
         importlib.import_module(name)
         print('OK:', name)
@@ -42,7 +42,21 @@ def self_test(root):
         assert len(gpd.read_file(path)) == 1
     import Processing.predict
     import numpy as np
+    import torch
+    model = Processing.predict.detection_model
+    expected_device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+    assert str(model.device) == expected_device, (model.device, expected_device)
+    assert next(model.model.parameters()).device.type == expected_device.split(':')[0]
+    if require_gpu and expected_device == 'cpu':
+        raise RuntimeError('GPU self-test requested but CUDA is unavailable.')
+    from torchvision.ops import nms
+    boxes = torch.tensor([[0., 0., 10., 10.], [1., 1., 9., 9.],
+                          [20., 20., 30., 30.]], device=expected_device)
+    scores = torch.tensor([0.9, 0.8, 0.7], device=expected_device)
+    assert nms(boxes, scores, 0.5).tolist() == [0, 2]
     Processing.predict.detection_model.perform_inference(np.zeros((64, 64, 3), dtype=np.uint8))
+    if expected_device.startswith('cuda'):
+        torch.cuda.synchronize()
     from View.Windows.see_otter_window import SeeOtterWindow
     print('PASS: dependencies, resources, GIS round trip, model load, inference and app imports')
 
@@ -80,9 +94,13 @@ def main():
     parser.add_argument('--tool')
     parser.add_argument('--list-tools', action='store_true')
     parser.add_argument('--self-test', action='store_true')
+    parser.add_argument('--require-gpu', action='store_true',
+                        help='Require actual CUDA inference with --self-test')
     parser.add_argument('--gui-smoke-test', action='store_true')
     parser.add_argument('--tool-smoke-test', action='store_true')
     args = parser.parse_args()
+    if args.require_gpu and not args.self_test:
+        parser.error('--require-gpu requires --self-test')
     if args.self_test or args.gui_smoke_test or args.tool_smoke_test:
         os.environ['SEEOTTER_AUTOMATED_TEST'] = '1'
     root = distribution_root()
@@ -91,7 +109,7 @@ def main():
         for key, (label, _) in tools(root).items():
             print(key + ': ' + label)
     elif args.self_test:
-        self_test(root)
+        self_test(root, require_gpu=args.require_gpu)
     elif args.gui_smoke_test:
         from kivy.clock import Clock
         from View.Windows.see_otter_window import SeeOtterWindow
